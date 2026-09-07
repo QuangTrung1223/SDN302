@@ -1,0 +1,16 @@
+{
+  "name": "lab01-nodejs",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SDN302 Lab 01",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.11.23"
+  }
+}
