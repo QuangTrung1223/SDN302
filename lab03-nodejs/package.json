@@ -1,0 +1,13 @@
+{
+  "name": "lab03-nodejs",
+  "version": "1.0.0",
+  "description": "SDN302 Lab 03 - Building Web Applications with Express.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm start --prefix lab03-express",
+    "dev": "npm run dev --prefix lab03-express",
+    "test": "node verifyLab03.js"
+  },
+  "author": "Nguyen Le Quang Trung (DS190284)",
+  "license": "ISC"
+}

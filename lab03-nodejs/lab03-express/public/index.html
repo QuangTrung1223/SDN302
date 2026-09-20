@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest Online Bookstore | SDN302 Lab 03</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <div class="logo-icon">📖</div>
+        <div>
+          <span class="logo-title">BookNest</span>
+          <span class="logo-badge">Lab 03 Express.js</span>
+        </div>
+      </div>
+      <div class="header-meta">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span id="uptimeText">Checking Server...</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <section class="hero-section">
+      <h1 class="hero-title">BookNest Bookstore <span class="gradient-text">Express.js API</span></h1>
+      <p class="hero-subtitle">
+        RESTful API architecture with modular routers, multi-tier middleware pipeline, validation, and centralized error handling for SDN302.
+      </p>
+      <div class="hero-actions">
+        <a href="/health" class="btn btn-primary" target="_blank">View /health JSON</a>
+        <button class="btn btn-secondary" id="btnTestBooks">Fetch /api/books</button>
+      </div>
+    </section>
+
+    <section class="grid-section">
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Requirement 1: Express App</h3>
+        <p>Configured with environment variables via <code>dotenv</code>, automatic file watch with <code>nodemon</code>, root route and <code>/health</code> uptime endpoint.</p>
+        <div class="code-pill">GET /health &bull; Port 3000</div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🛣️</div>
+        <h3>Requirement 2: RESTful Router</h3>
+        <p>Separated router mounted at <code>/api/books</code> exposing full CRUD with auto-generated identifiers and standard HTTP status codes (200, 201, 400, 404).</p>
+        <div class="code-pill">express.Router() &bull; 5 Endpoints</div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3>Requirement 3: Middleware Suite</h3>
+        <p>Built-in <code>express.json()</code>, <code>urlencoded</code>, <code>express.static</code>; third-party <code>morgan</code>; custom response-time logger; and <code>x-api-key</code> protection.</p>
+        <div class="code-pill">Morgan &bull; Custom Logger &bull; 401 Auth</div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">⚠️</div>
+        <h3>Requirement 4: Error Handling</h3>
+        <p>Request body schema validation, catch-all 404 handler, and uniform 4-param centralized error handler tested with deliberate error route.</p>
+        <div class="code-pill">GET /api/books/error-test &bull; 500</div>
+      </div>
+    </section>
+
+    <section class="api-docs-section">
+      <h2>Endpoints Reference</h2>
+      <div class="table-container">
+        <table class="endpoint-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Endpoint</th>
+              <th>Headers</th>
+              <th>Status</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge get">GET</span></td>
+              <td><code>/</code></td>
+              <td>None</td>
+              <td>200 OK</td>
+              <td>API welcome message & documentation link</td>
+            </tr>
+            <tr>
+              <td><span class="badge get">GET</span></td>
+              <td><code>/health</code></td>
+              <td>None</td>
+              <td>200 OK</td>
+              <td>System health check and server uptime</td>
+            </tr>
+            <tr>
+              <td><span class="badge get">GET</span></td>
+              <td><code>/api/books</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>200 OK</td>
+              <td>Retrieve all books in the catalog</td>
+            </tr>
+            <tr>
+              <td><span class="badge get">GET</span></td>
+              <td><code>/api/books/:id</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>200 / 404</td>
+              <td>Retrieve single book details by ID</td>
+            </tr>
+            <tr>
+              <td><span class="badge post">POST</span></td>
+              <td><code>/api/books</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>201 / 400</td>
+              <td>Create new book (title, price > 0, category)</td>
+            </tr>
+            <tr>
+              <td><span class="badge put">PUT</span></td>
+              <td><code>/api/books/:id</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>200 / 400 / 404</td>
+              <td>Update existing book properties</td>
+            </tr>
+            <tr>
+              <td><span class="badge delete">DELETE</span></td>
+              <td><code>/api/books/:id</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>200 / 404</td>
+              <td>Delete a book by ID</td>
+            </tr>
+            <tr>
+              <td><span class="badge get">GET</span></td>
+              <td><code>/api/books/error-test</code></td>
+              <td><code>x-api-key: [key]</code></td>
+              <td>500 Error</td>
+              <td>Deliberately triggers central error handler</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-console-section">
+      <h2>Interactive API Response Tester</h2>
+      <p class="console-hint">Demonstrates static asset delivery, fetch API, and real-time response from Express.</p>
+      <div class="console-box">
+        <div class="console-header">
+          <span class="console-title">Live Response Output</span>
+          <span id="responseStatusBadge" class="badge">Idle</span>
+        </div>
+        <pre id="jsonViewer">Click "Fetch /api/books" or enter your query to view live JSON response here...</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>SDN302 - Server-side Development with NodeJS, Express and MongoDB &bull; Lab 03</p>
+      <p class="footer-author">Student: Nguyen Le Quang Trung (DS190284)</p>
+    </div>
+  </footer>
+
+  <script>
+    // Fetch server health on load
+    async function checkHealth() {
+      try {
+        const res = await fetch('/health');
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('uptimeText').textContent = 'Server Online &bull; Uptime: ' + Math.floor(data.uptime) + 's';
+        }
+      } catch (err) {
+        document.getElementById('uptimeText').textContent = 'Connecting...';
+      }
+    }
+
+    document.getElementById('btnTestBooks').addEventListener('click', async () => {
+      const viewer = document.getElementById('jsonViewer');
+      const badge = document.getElementById('responseStatusBadge');
+      viewer.textContent = 'Sending GET /api/books with x-api-key: booknest-secret-key-2026...';
+      badge.textContent = 'Loading...';
+      badge.className = 'badge';
+
+      try {
+        const res = await fetch('/api/books', {
+          headers: {
+            'x-api-key': 'booknest-secret-key-2026'
+          }
+        });
+        const json = await res.json();
+        badge.textContent = res.status + ' ' + res.statusText;
+        badge.className = 'badge ' + (res.ok ? 'get' : 'delete');
+        viewer.textContent = JSON.stringify(json, null, 2);
+      } catch (err) {
+        badge.textContent = 'Error';
+        badge.className = 'badge delete';
+        viewer.textContent = 'Error: ' + err.message;
+      }
+    });
+
+    checkHealth();
+    setInterval(checkHealth, 5000);
+  </script>
+</body>
+</html>
