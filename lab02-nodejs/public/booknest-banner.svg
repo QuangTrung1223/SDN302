@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="50%" stop-color="#312e81" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="book1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="book2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <linearGradient id="book3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" rx="16" fill="url(#bgGrad)" />
+
+  <!-- Grid Pattern -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="100" x2="800" y2="100" />
+    <line x1="0" y1="200" x2="800" y2="200" />
+    <line x1="0" y1="300" x2="800" y2="300" />
+    <line x1="0" y1="400" x2="800" y2="400" />
+    <line x1="160" y1="0" x2="160" y2="500" />
+    <line x1="320" y1="0" x2="320" y2="500" />
+    <line x1="480" y1="0" x2="480" y2="500" />
+    <line x1="640" y1="0" x2="640" y2="500" />
+  </g>
+
+  <!-- Glowing background elements -->
+  <circle cx="400" cy="220" r="160" fill="#4f46e5" opacity="0.25" filter="url(#glow)" />
+  <circle cx="480" cy="260" r="120" fill="#06b6d4" opacity="0.2" filter="url(#glow)" />
+
+  <!-- Books Shelf / Stack -->
+  <g transform="translate(180, 110)">
+    <!-- Book 1 (Left tilt) -->
+    <g transform="rotate(-15 120 180)">
+      <rect x="70" y="80" width="60" height="220" rx="6" fill="url(#book3)" />
+      <rect x="75" y="90" width="50" height="15" fill="#ffffff" opacity="0.25" rx="3" />
+      <rect x="75" y="120" width="8" height="150" fill="#ffffff" opacity="0.15" rx="2" />
+    </g>
+
+    <!-- Book 2 (Center back) -->
+    <rect x="170" y="70" width="65" height="240" rx="6" fill="url(#book1)" />
+    <rect x="176" y="85" width="53" height="20" fill="#ffffff" opacity="0.3" rx="3" />
+    <line x1="176" y1="120" x2="229" y2="120" stroke="#ffffff" stroke-width="2" opacity="0.4" />
+    <line x1="176" y1="130" x2="229" y2="130" stroke="#ffffff" stroke-width="2" opacity="0.4" />
+
+    <!-- Book 3 (Center front) -->
+    <rect x="250" y="100" width="60" height="210" rx="6" fill="url(#book2)" />
+    <rect x="256" y="115" width="48" height="18" fill="#ffffff" opacity="0.25" rx="3" />
+
+    <!-- Book 4 (Right tilt) -->
+    <g transform="rotate(18 350 200)">
+      <rect x="330" y="110" width="65" height="210" rx="6" fill="#10b981" />
+      <rect x="336" y="125" width="53" height="18" fill="#ffffff" opacity="0.25" rx="3" />
+    </g>
+
+    <!-- Shelf line -->
+    <rect x="30" y="310" width="380" height="12" rx="6" fill="#475569" />
+  </g>
+
+  <!-- Title overlay text -->
+  <text x="400" y="420" font-family="'Inter', sans-serif" font-size="32" font-weight="800" text-anchor="middle" fill="url(#goldText)" letter-spacing="1">
+    BOOKNEST ONLINE BOOKSTORE
+  </text>
+  <text x="400" y="455" font-family="'Inter', sans-serif" font-size="16" font-weight="500" text-anchor="middle" fill="#94a3b8">
+    HTTP Server &amp; File System API &bull; SDN302
+  </text>
+</svg>
