@@ -1,0 +1,30 @@
+{
+  "name": "lab02-nodejs",
+  "version": "1.0.0",
+  "description": "SDN302 Lab 02 - APIs, the HTTP Module and the File System (BookNest) in TypeScript",
+  "type": "module",
+  "main": "server.ts",
+  "scripts": {
+    "start": "tsx server.ts",
+    "dev": "tsx watch server.ts",
+    "typecheck": "tsc --noEmit",
+    "test:callbacks": "tsx testCallbacks.ts",
+    "test:server": "tsx verifyServer.ts",
+    "package": "tsx package-submission.ts"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "http",
+    "fs",
+    "booknest",
+    "sdn302"
+  ],
+  "author": "Nguyen Le Quang Trung (DS190284)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.19.34",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

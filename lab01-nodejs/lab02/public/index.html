@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest - Online Bookstore</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">Book<strong>Nest</strong></span>
+      </div>
+      <nav class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/about" class="nav-link">About Us</a>
+        <a href="/api/books" class="nav-link" target="_blank">All Books (API)</a>
+        <a href="/api/books?category=IT&limit=2" class="nav-link" target="_blank">IT Books (Filtered)</a>
+        <a href="/download" class="btn btn-download">📥 Download Catalog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-section">
+      <div class="hero-text">
+        <span class="badge">SDN302 Node.js Lab 02</span>
+        <h1>Welcome to BookNest Online Bookstore</h1>
+        <p>Explore a vast collection of curated books across software engineering, architecture, science, and literature. Built with native Node.js core modules.</p>
+        <div class="hero-actions">
+          <a href="/api/books" class="btn btn-primary" target="_blank">Explore Books API</a>
+          <a href="/download" class="btn btn-outline">Download Offline Catalog</a>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <img src="/booknest-banner.svg" alt="BookNest Banner" class="hero-banner" id="heroImage">
+      </div>
+    </section>
+
+    <section class="endpoints-card">
+      <h2>Available Server Endpoints</h2>
+      <div class="endpoint-grid">
+        <div class="endpoint-item">
+          <span class="badge badge-get">GET</span>
+          <code>/</code>
+          <p>BookNest HTML Homepage</p>
+        </div>
+        <div class="endpoint-item">
+          <span class="badge badge-get">GET</span>
+          <code>/about</code>
+          <p>HTML About Us Page</p>
+        </div>
+        <div class="endpoint-item">
+          <span class="badge badge-get">GET</span>
+          <code>/api/books</code>
+          <p>JSON list of all books (supports ?category=&amp;limit=)</p>
+        </div>
+        <div class="endpoint-item">
+          <span class="badge badge-post">POST</span>
+          <code>/api/books</code>
+          <p>Add a new book into books.json (returns 201 Created)</p>
+        </div>
+        <div class="endpoint-item">
+          <span class="badge badge-get">GET</span>
+          <code>/download</code>
+          <p>Download book catalog as an attachment</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 BookNest Bookstore &bull; Developed by Nguyen Le Quang Trung (DS190284)</p>
+      <p class="sub-text">SDN302 - Server-side Development with NodeJS, Express and MongoDB</p>
+    </div>
+  </footer>
+</body>
+</html>
