@@ -1,0 +1,282 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "BookNest_Lab02_SDN302",
+    "description": "Postman Collection for SDN302 Lab 02 - APIs, the HTTP Module and the File System.\nStudent: Nguyen Le Quang Trung (DS190284)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Requirement 1 - Public REST API (JSONPlaceholder)",
+      "item": [
+        {
+          "name": "1. GET /posts (List All Posts)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": ["jsonplaceholder", "typicode", "com"],
+              "path": ["posts"]
+            },
+            "description": "Send GET request to fetch a list of posts from JSONPlaceholder."
+          },
+          "response": []
+        },
+        {
+          "name": "2. POST /posts (Create Post)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"BookNest Architecture Overview\",\n  \"body\": \"Building scalable backend services with pure Node.js HTTP module and file system persistence.\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": ["jsonplaceholder", "typicode", "com"],
+              "path": ["posts"]
+            },
+            "description": "Send POST request to create a new post."
+          },
+          "response": []
+        },
+        {
+          "name": "3. PUT /posts/1 (Update Post)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"BookNest Architecture Overview (Updated)\",\n  \"body\": \"Updated content demonstrating RESTful PUT operation.\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts/1",
+              "protocol": "https",
+              "host": ["jsonplaceholder", "typicode", "com"],
+              "path": ["posts", "1"]
+            },
+            "description": "Send PUT request to replace post #1."
+          },
+          "response": []
+        },
+        {
+          "name": "4. DELETE /posts/1 (Delete Post)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts/1",
+              "protocol": "https",
+              "host": ["jsonplaceholder", "typicode", "com"],
+              "path": ["posts", "1"]
+            },
+            "description": "Send DELETE request to delete post #1."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Requirements 2 & 3 - BookNest Core Server & Routes",
+      "item": [
+        {
+          "name": "1. GET / (Homepage HTML)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [""]
+            },
+            "description": "Returns HTML homepage with Content-Type: text/html and status 200."
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET /about (About HTML)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/about",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["about"]
+            },
+            "description": "Returns About Us page with Content-Type: text/html and status 200."
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET /api/books (All Books)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/books",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "books"]
+            },
+            "description": "Returns JSON array of at least 5 books with Content-Type: application/json."
+          },
+          "response": []
+        },
+        {
+          "name": "4. GET /api/books?category=IT&limit=2 (Filter & Limit)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/books?category=IT&limit=2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "books"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "IT"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Filters books by category 'IT' and limits output to 2 books."
+          },
+          "response": []
+        },
+        {
+          "name": "5. POST /api/books (Add Book & Persist)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Refactoring: Improving the Design of Existing Code\",\n  \"author\": \"Martin Fowler\",\n  \"category\": \"IT\",\n  \"price\": 47.50,\n  \"stock\": 14\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/books",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "books"]
+            },
+            "description": "Appends new book into books.json and returns status 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "6. PUT /api/books (Test 405 Method Not Allowed)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/books",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "books"]
+            },
+            "description": "Tests unsupported method handling, returning 405 Method Not Allowed with Allow header."
+          },
+          "response": []
+        },
+        {
+          "name": "7. GET /non-existent-route (Test 404 Not Found)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/non-existent-route",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["non-existent-route"]
+            },
+            "description": "Tests unknown route handling, returning status 404 with styled error page."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Requirement 5 - Static Files & File Download",
+      "item": [
+        {
+          "name": "1. GET /style.css (Static CSS File)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/style.css",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["style.css"]
+            },
+            "description": "Returns static stylesheet with Content-Type: text/css."
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET /booknest-banner.svg (Static Image File)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/booknest-banner.svg",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["booknest-banner.svg"]
+            },
+            "description": "Returns vector banner with Content-Type: image/svg+xml."
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET /download (File Attachment)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/download",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["download"]
+            },
+            "description": "Sends file as attachment with Content-Disposition: attachment; filename=\"booknest-catalog.txt\"."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

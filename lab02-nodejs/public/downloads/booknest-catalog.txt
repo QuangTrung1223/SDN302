@@ -1,0 +1,46 @@
+================================================================================
+                           BOOKNEST ONLINE BOOKSTORE
+                     Official Catalog & Course Reference
+================================================================================
+Student Name: Nguyen Le Quang Trung
+Student ID  : DS190284
+Course      : SDN302 - Server-side Development with NodeJS, Express and MongoDB
+Lab         : Lab 02 - APIs, the HTTP Module and the File System
+Date        : 2026-09-14
+================================================================================
+
+FEATURED BOOKS:
+--------------------------------------------------------------------------------
+1. Clean Code: A Handbook of Agile Software Craftsmanship
+   - Author: Robert C. Martin
+   - Category: IT
+   - ISBN: 978-0132350884
+   - Price: $35.99
+
+2. The Pragmatic Programmer: Your Journey To Mastery
+   - Author: Andrew Hunt, David Thomas
+   - Category: IT
+   - ISBN: 978-0201616224
+   - Price: $42.50
+
+3. Designing Data-Intensive Applications
+   - Author: Martin Kleppmann
+   - Category: IT
+   - ISBN: 978-1449373320
+   - Price: $49.99
+
+4. Zero to One: Notes on Startups, or How to Build the Future
+   - Author: Peter Thiel, Blake Masters
+   - Category: Business
+   - ISBN: 978-0804139298
+   - Price: $22.00
+
+5. The Great Gatsby
+   - Author: F. Scott Fitzgerald
+   - Category: Literature
+   - ISBN: 978-0743273565
+   - Price: $15.50
+--------------------------------------------------------------------------------
+Thank you for downloading from BookNest!
+Visit our API at: http://localhost:3000/api/books
+================================================================================
