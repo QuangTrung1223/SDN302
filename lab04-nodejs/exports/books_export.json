@@ -1,0 +1,337 @@
+[
+  {
+    "_id": "662222222222222222222201",
+    "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+    "price": 37.95,
+    "quantity": 25,
+    "publishedYear": 2008,
+    "category": "Software Engineering",
+    "categoryId": "661111111111111111111101",
+    "authorId": "660000000000000000000001",
+    "tags": [
+      "clean-code",
+      "refactoring",
+      "agile",
+      "best-practices"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Alice Nguyen",
+        "rating": 5,
+        "comment": "A timeless masterpiece every programmer must read.",
+        "date": "2026-02-01T00:00:00.000Z"
+      },
+      {
+        "reviewer": "Bob Smith",
+        "rating": 4,
+        "comment": "Great principles, though some Java examples are a bit dated.",
+        "date": "2026-02-10T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T10:00:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222202",
+    "title": "The Clean Coder: A Code of Conduct for Professional Programmers",
+    "price": 34.5,
+    "quantity": 18,
+    "publishedYear": 2011,
+    "category": "Software Engineering",
+    "categoryId": "661111111111111111111101",
+    "authorId": "660000000000000000000001",
+    "tags": [
+      "professionalism",
+      "career",
+      "clean-code",
+      "discipline"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Charlie Tran",
+        "rating": 5,
+        "comment": "Super practical advice on estimating, saying no, and ethics.",
+        "date": "2026-02-14T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T10:15:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222203",
+    "title": "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
+    "price": 42,
+    "quantity": 12,
+    "publishedYear": 2017,
+    "category": "Software Architecture",
+    "categoryId": "661111111111111111111102",
+    "authorId": "660000000000000000000001",
+    "tags": [
+      "architecture",
+      "clean-code",
+      "solid",
+      "design-patterns"
+    ],
+    "reviews": [
+      {
+        "reviewer": "David Pham",
+        "rating": 5,
+        "comment": "The dependency inversion principle explained with razor sharpness.",
+        "date": "2026-02-20T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T10:30:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222204",
+    "title": "Refactoring: Improving the Design of Existing Code",
+    "price": 49.99,
+    "quantity": 15,
+    "publishedYear": 2018,
+    "category": "Software Engineering",
+    "categoryId": "661111111111111111111101",
+    "authorId": "660000000000000000000002",
+    "tags": [
+      "refactoring",
+      "code-smells",
+      "testing",
+      "javascript"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Eva Le",
+        "rating": 5,
+        "comment": "The 2nd edition in modern JavaScript is pure gold.",
+        "date": "2026-02-25T00:00:00.000Z"
+      },
+      {
+        "reviewer": "Frank Miller",
+        "rating": 5,
+        "comment": "Every refactoring catalog entry is crystal clear.",
+        "date": "2026-03-01T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T11:00:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222205",
+    "title": "Patterns of Enterprise Application Architecture",
+    "price": 54,
+    "quantity": 8,
+    "publishedYear": 2002,
+    "category": "Software Architecture",
+    "categoryId": "661111111111111111111102",
+    "authorId": "660000000000000000000002",
+    "tags": [
+      "enterprise",
+      "architecture",
+      "patterns",
+      "data-mapper"
+    ],
+    "reviews": [
+      {
+        "reviewer": "George Vu",
+        "rating": 4,
+        "comment": "Foundational architecture patterns, highly recommended.",
+        "date": "2026-03-05T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T11:15:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222206",
+    "title": "You Don't Know JS Yet: Get Started",
+    "price": 18.99,
+    "quantity": 40,
+    "publishedYear": 2020,
+    "category": "Web Development",
+    "categoryId": "661111111111111111111103",
+    "authorId": "660000000000000000000003",
+    "tags": [
+      "javascript",
+      "web",
+      "fundamentals",
+      "ydkjs"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Helen Hoang",
+        "rating": 5,
+        "comment": "Deepens your core JS intuition like nothing else.",
+        "date": "2026-03-08T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T11:30:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222207",
+    "title": "You Don't Know JS Yet: Scope & Closures",
+    "price": 24.95,
+    "quantity": 35,
+    "publishedYear": 2020,
+    "category": "Web Development",
+    "categoryId": "661111111111111111111103",
+    "authorId": "660000000000000000000003",
+    "tags": [
+      "javascript",
+      "closures",
+      "scope",
+      "ydkjs"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Ian Do",
+        "rating": 5,
+        "comment": "Demystifies lexical scope and hoisting permanently.",
+        "date": "2026-03-10T00:00:00.000Z"
+      },
+      {
+        "reviewer": "Jenny Vo",
+        "rating": 5,
+        "comment": "Concise, deep, and beautifully explained.",
+        "date": "2026-03-11T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T11:45:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222208",
+    "title": "You Don't Know JS Yet: Objects & Classes",
+    "price": 26.5,
+    "quantity": 22,
+    "publishedYear": 2021,
+    "category": "Web Development",
+    "categoryId": "661111111111111111111103",
+    "authorId": "660000000000000000000003",
+    "tags": [
+      "javascript",
+      "prototypes",
+      "objects",
+      "classes",
+      "ydkjs"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Kevin Lam",
+        "rating": 4,
+        "comment": "Prototypes explained without the syntactic sugar confusion.",
+        "date": "2026-03-12T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T12:00:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222209",
+    "title": "Domain-Driven Design: Tackling Complexity in the Heart of Software",
+    "price": 58.5,
+    "quantity": 6,
+    "publishedYear": 2003,
+    "category": "Software Architecture",
+    "categoryId": "661111111111111111111102",
+    "authorId": "660000000000000000000004",
+    "tags": [
+      "ddd",
+      "ubiquitous-language",
+      "bounded-context",
+      "architecture"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Linda Ngo",
+        "rating": 5,
+        "comment": "The blue book that changed modern enterprise architecture.",
+        "date": "2026-03-14T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T12:15:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222210",
+    "title": "Domain-Driven Design Reference: Definitions and Pattern Summaries",
+    "price": 21,
+    "quantity": 14,
+    "publishedYear": 2014,
+    "category": "Software Architecture",
+    "categoryId": "661111111111111111111102",
+    "authorId": "660000000000000000000004",
+    "tags": [
+      "ddd",
+      "reference",
+      "architecture",
+      "patterns"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Minh Tran",
+        "rating": 4,
+        "comment": "Great quick handbook summarizing all DDD tactical patterns.",
+        "date": "2026-03-15T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T12:30:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222211",
+    "title": "Node.js Design Patterns: Design and implement production-grade Node.js apps",
+    "price": 45,
+    "quantity": 20,
+    "publishedYear": 2020,
+    "category": "Web Development",
+    "categoryId": "661111111111111111111103",
+    "authorId": "660000000000000000000002",
+    "tags": [
+      "nodejs",
+      "express",
+      "asynchronous",
+      "design-patterns"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Nhi Nguyen",
+        "rating": 5,
+        "comment": "Best comprehensive guide to the Node.js event loop and streams.",
+        "date": "2026-03-16T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T12:45:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222212",
+    "title": "Designing Data-Intensive Applications: The Big Ideas Behind Reliable Systems",
+    "price": 52,
+    "quantity": 5,
+    "publishedYear": 2017,
+    "category": "Database Systems",
+    "categoryId": "661111111111111111111104",
+    "authorId": "660000000000000000000002",
+    "tags": [
+      "database",
+      "nosql",
+      "distributed-systems",
+      "reliability"
+    ],
+    "reviews": [
+      {
+        "reviewer": "Oscar Bui",
+        "rating": 5,
+        "comment": "Unquestionably the best computing textbook of the decade.",
+        "date": "2026-03-18T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-20T13:00:00.000Z"
+  },
+  {
+    "_id": "662222222222222222222213",
+    "title": "Obsolete Draft: Deprecated Legacy Guide",
+    "price": 9.99,
+    "quantity": 0,
+    "publishedYear": 1999,
+    "category": "Software Engineering",
+    "categoryId": "661111111111111111111101",
+    "authorId": "660000000000000000000001",
+    "tags": [
+      "deprecated",
+      "outdated"
+    ],
+    "reviews": [],
+    "createdAt": "2026-01-20T13:15:00.000Z"
+  }
+]
