@@ -1,0 +1,27 @@
+{
+  "name": "lab04-nodejs",
+  "version": "1.0.0",
+  "description": "Lab 04: NoSQL Databases with MongoDB - BookNest Online Bookstore",
+  "main": "verifyLab04.js",
+  "type": "module",
+  "scripts": {
+    "start": "node verifyLab04.js",
+    "test": "node verifyLab04.js",
+    "verify": "node verifyLab04.js",
+    "seed": "node verifyLab04.js --seed-only",
+    "export-data": "node verifyLab04.js --export"
+  },
+  "keywords": [
+    "nodejs",
+    "mongodb",
+    "mongosh",
+    "booknest",
+    "sdn302"
+  ],
+  "author": "Nguyen Le Quang Trung (DS190284)",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.8.0"
+  }
+}
