@@ -330,90 +330,216 @@ Choosing between **Embedding (Denormalization)** and **Referencing (Normalized L
 
 ---
 
-## 5. MongoDB Compass Step-by-Step Execution Guide
+## 5. Requirement 4: Connecting Node.js to MongoDB with the Official Driver
 
-### 5.1 Connecting to MongoDB via Compass
-1. Launch **MongoDB Compass** (installed at `C:\Users\Guang Trump\AppData\Local\MongoDBCompass\MongoDBCompass.exe`).
-2. In the **New Connection** screen:
-   - For **Local Community Server**: Enter `mongodb://127.0.0.1:27017` and click **Connect**.
-   - For **MongoDB Atlas**: Paste your cluster connection string (e.g. `mongodb+srv://<username>:<password>@cluster0.mongodb.net/booknest`) and click **Connect**.
+### 5.1 Environment Configuration & Connection Management (`db.js`)
+- Installed the official driver: `npm install mongodb dotenv express morgan`
+- Connection configuration is strictly isolated in `.env` and excluded from Git commits via `.gitignore`:
+  ```env
+  PORT=3000
+  MONGODB_URI=mongodb://127.0.0.1:27017/booknest
+  DB_NAME=booknest
+  ```
+- **`db.js` Architecture**:
+  - Implements the **Singleton Connection Pool Pattern** using `MongoClient`.
+  - Caches the active `Db` object to avoid opening redundant TCP sockets per incoming HTTP request.
+  - Exports `connectDB()`, `getDb()`, `isLive()`, and `closeDB()`.
+  ```javascript
+  import { MongoClient } from 'mongodb';
 
-### 5.2 Viewing the `booknest` Database and Collections
-1. Once connected, locate the **`booknest`** database in the left sidebar navigation.
-2. Expand `booknest` to view the three collections:
-   - **`authors`**: 4 documents
-   - **`categories`**: 4 documents
-   - **`books`**: 12 documents
-3. Click on **`books`** to inspect documents in **List**, **JSON**, or **Table** view.
+  let client = null;
+  let db = null;
 
-### 5.3 Exporting Collection to JSON in Compass (Requirement 1)
-1. In the `books` collection tab, click the **Collection** dropdown menu at the top or the **Export Data** button.
-2. Select **Export Entire Collection**.
-3. Choose **JSON** as the export format.
-4. Set the destination path to `d:\Semester7\SDN302\lab04-nodejs\exports\books_export.json`.
-5. Click **Export** to generate the file.
+  export async function connectDB() {
+    if (db) return db;
+    client = new MongoClient(process.env.MONGODB_URI, { maxPoolSize: 10 });
+    await client.connect();
+    db = client.db(process.env.DB_NAME);
+    return db;
+  }
 
-### 5.4 Using Compass's Embedded `>_ _MONGOSH` Terminal
-1. At the very bottom of the MongoDB Compass window, click the **`>_ _MONGOSH`** tab to open the built-in terminal.
-2. Switch to the `booknest` database:
-   ```bash
-   use booknest
-   ```
-3. Run any query directly:
-   ```bash
-   db.books.find({ price: { $gt: 35 } })
-   ```
-4. Or load the prepared script files directly:
-   ```bash
-   load("d:/Semester7/SDN302/lab04-nodejs/scripts/seed.js")
-   load("d:/Semester7/SDN302/lab04-nodejs/scripts/queries.js")
-   load("d:/Semester7/SDN302/lab04-nodejs/scripts/relationships.js")
-   ```
+  export function getDb() { return db; }
+  ```
+
+### 5.2 Replacing In-Memory Array with Driver CRUD Functions (`services/bookService.js`)
+The in-memory JavaScript array from Lab 03 is replaced with real MongoDB collection operations:
+
+| Function | Operation | Driver Method | Description |
+| :--- | :--- | :--- | :--- |
+| `getAllBooks({ page, limit })` | READ ALL | `collection.find().skip().limit().toArray()` | Retrieves all books with pagination metadata |
+| `getBookById(id)` | READ ONE | `collection.findOne({ _id: new ObjectId(id) })` | Retrieves single book by its 24-character hexadecimal ObjectId |
+| `createBook(bookData)` | CREATE | `collection.insertOne(newDoc)` | Inserts book with timestamp and returns created document |
+| `updateBook(id, updateData)` | UPDATE | `collection.findOneAndUpdate({ _id: ObjectId }, { $set: fields })` | Updates specified fields atomically |
+| `deleteBook(id)` | DELETE | `collection.deleteOne({ _id: new ObjectId(id) })` | Removes document by its ObjectId |
+
+### 5.3 Express RESTful Route Mapping (`routes/bookRouter.js`)
+Mounted in `index.js` under `/api/books`:
+- `GET  /api/books` -> `getAllBooks`
+- `GET  /api/books/:id` -> `getBookById`
+- `POST /api/books` -> `createBook`
+- `PUT  /api/books/:id` -> `updateBook`
+- `DELETE /api/books/:id` -> `deleteBook`
 
 ---
 
-## 6. Automated Verification Results
+## 6. Requirement 5: Advanced Queries, Search, Pagination & 500 Error Handling
 
-Running `npm test` or `node verifyLab04.js`:
+### 6.1 Advanced Search Endpoint (`GET /api/books/search`)
+- **Query Parameters**:
+  - `category`: filters books by exact category name (case-insensitive)
+  - `minPrice`: lower bound on book price (`price >= minPrice`)
+  - `maxPrice`: upper bound on book price (`price <= maxPrice`)
+  - `keyword`: searches case-insensitively across book `title` and `tags` using `$regex`
+  - `page` & `limit`: pagination parameters
+- **Dynamic Query Filter Builder**:
+  ```javascript
+  const filter = {};
+  if (category) filter.category = { $regex: new RegExp(`^${category.trim()}$`, 'i') };
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) filter.price.$gte = parseFloat(minPrice);
+    if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
+  }
+  if (keyword) {
+    const kwRegex = { $regex: keyword.trim(), $options: 'i' };
+    filter.$or = [{ title: kwRegex }, { tags: kwRegex }];
+  }
+  ```
+
+### 6.2 Standardized Pagination Response Envelope
+All list and search responses return structured pagination metadata:
+```json
+{
+  "success": true,
+  "total": 13,
+  "page": 1,
+  "limit": 5,
+  "totalPages": 3,
+  "data": [ ... ],
+  "message": "Books searched successfully"
+}
+```
+
+### 6.3 Robust Try/Catch Wrapping & Status 500 Responses
+Every database interaction in `bookRouter.js` is wrapped in explicit `try/catch` blocks:
+- On database failure, the router catches the exception and returns HTTP status `500` with descriptive error details:
+  ```javascript
+  try {
+    const book = await getBookById(id);
+    // ...
+  } catch (err) {
+    console.error(`[bookRouter:getById] Error:`, err);
+    res.status(500).json({
+      success: false,
+      error: 'DatabaseError',
+      message: `Failed to retrieve book by id from database: ${err.message}`
+    });
+  }
+  ```
+- If an invalid hexadecimal string is supplied for `_id`, it is caught early and rejected with HTTP `400 Bad Request`:
+  ```json
+  {
+    "success": false,
+    "error": "InvalidIdError",
+    "message": "Invalid book ID format: 'invalid-id-xyz'. Must be a 24-character hexadecimal ObjectId."
+  }
+  ```
+
+---
+
+## 7. MongoDB Compass Step-by-Step Execution Guide & Screenshots Checklist
+
+### 7.1 Checklist of Screenshots for DOC Submission
+
+| # | Requirement | Screen to Capture | Description |
+| :-: | :--- | :--- | :--- |
+| **1** | Req 1 | MongoDB Compass Left Sidebar | Show database **`booknest`** with 3 collections: `authors` (4), `categories` (4), `books` (13). |
+| **2** | Req 1 | MongoDB Compass Collection View | Click collection **`books`**, showing documents with title, price, quantity, category, tags, authorId, reviews. |
+| **3** | Req 1 | JSON Export File | Open `exports/books_export.json` in VSCode showing exported documents with `$oid` and `$date`. |
+| **4** | Req 2 | mongosh: Comparison Queries | Output of `$gt` (price > 35), `$lte` (quantity <= 10), `$in`, `$ne` in Compass `>_ MONGOSH` panel. |
+| **5** | Req 2 | mongosh: Regex Search | Output of `{ title: { $regex: /clean/i } }` showing matching Clean Code books. |
+| **6** | Req 2 | mongosh: Pagination | Output of `sort({ price: -1 }).skip(3).limit(3)` returning Page 2 (3 items). |
+| **7** | Req 2 | mongosh: Update & Delete | Output of `updateOne` with `$set` & `$inc` and `deleteMany`. |
+| **8** | Req 2 | mongosh: Aggregation Pipeline | Output of `aggregate` grouping books per category and sorting descending. |
+| **9** | Req 3 | mongosh: Relationships Demo | Output of embedded reviews and `$lookup` join from `books` to `authors` and `categories`. |
+| **10** | Req 4 & 5 | Terminal / Browser API Test | Run `npm test` showing all 22 integration tests passing (or browser at `http://localhost:3000/api/books`). |
+
+### 7.2 Commands to Run the Complete Lab
+
+#### Running mongosh Scripts (Requirements 1, 2, 3)
+In the MongoDB Compass `>_ _MONGOSH` tab at the bottom of the screen:
+```javascript
+use booknest
+load("d:/Semester7/SDN302/lab04-nodejs/scripts/seed.js")
+load("d:/Semester7/SDN302/lab04-nodejs/scripts/queries.js")
+load("d:/Semester7/SDN302/lab04-nodejs/scripts/relationships.js")
+```
+
+#### Running the Express Server & API (Requirements 4, 5)
+In PowerShell:
+```powershell
+cd d:\Semester7\SDN302\lab04-nodejs
+
+# Start Express Server
+npm start
+
+# Or run automated integration tests
+npm test
+```
+
+---
+
+## 8. Automated Integration Test Results
+
+### 8.1 API Integration Tests (`npm test` / `node testApi.js`)
 
 ```text
 ================================================================
-  🚀 BOOKNEST LAB 04 AUTOMATED TEST & VERIFICATION SUITE
-  Connecting to: mongodb://127.0.0.1:27017/booknest
+  🚀 BOOKNEST LAB 04 - API INTEGRATION TEST SUITE (Req 4 & 5)
 ================================================================
 
-  ✔ Connected to MongoDB successfully.
+[Section 1: Base Application Diagnostics]
+  ✔ PASS: GET / returns HTTP 200 OK
+  ✔ PASS: GET / returns success JSON with API documentation
+  ✔ PASS: GET /health returns HTTP 200 OK
+  ✔ PASS: GET /health verifies active database connection
 
-[Requirement 1: Database & Sample Data Preparation (20%)]
-  ✔ PASS: Collection 'authors' has >= 3 documents (Current: 4)
-  ✔ PASS: Collection 'categories' has >= 3 documents (Current: 4)
-  ✔ PASS: Collection 'books' has >= 10 documents (Current: 13)
-  ✔ PASS: Book documents contain all required fields: title, price, quantity, publishedYear, category, tags array
-  ✔ PASS: Successfully exported collection to JSON file (exports/books_export.json)
+[Section 2: Requirement 4 & 5 - List Books & Pagination]
+  ✔ PASS: GET /api/books returns HTTP 200 OK
+  ✔ PASS: GET /api/books returns envelope with total, page, limit, totalPages, and data array
 
-[Requirement 2: Advanced Queries with mongosh (25%)]
-  ✔ PASS: Comparison $gt: Retrieved 6 books with price > 35
-  ✔ PASS: Comparison $lte: Retrieved 3 books with quantity <= 10
-  ✔ PASS: Comparison $in: Retrieved 7 books in specified categories
-  ✔ PASS: Comparison $ne: Retrieved 9 books where publishedYear != 2020
-  ✔ PASS: $regex search: Case-insensitive match on 'clean' returned 3 books
-  ✔ PASS: Pagination: Returned exactly 3 books for page 2 (limit 3, skip 3)
-  ✔ PASS: Pagination projection: Correctly excluded _id and included projected fields
-  ✔ PASS: updateOne: Successfully matched and modified 1 book document
-  ✔ PASS: updateOne: $set applied price=39.99, $inc increased quantity to 30
-  ✔ PASS: deleteMany: Successfully removed 1 books matching filter (quantity <= 0)
-  ✔ PASS: Aggregation: Successfully grouped books by category into 4 groups
-  ✔ PASS: Aggregation: Results are correctly sorted in descending order by bookCount
+[Section 3: Requirement 4 - Create Book with Driver API]
+  ✔ PASS: POST /api/books returns HTTP 201 Created
+  ✔ PASS: POST /api/books returns newly inserted document with MongoDB generated _id
+  ✔ PASS: POST /api/books rejects invalid payload with HTTP 400 Bad Request
 
-[Requirement 3: Relationship Modeling - Embedded & Referenced (15%)]
-  ✔ PASS: Embedded Relationship: Book 'Clean Code: A Handbook of Agil...' embeds 2 review subdocuments
-  ✔ PASS: Embedded Review schema: Contains reviewer, rating, comment, and date fields
-  ✔ PASS: Referenced Relationship: $lookup successfully joined books with authors collection via authorId (ObjectId)
-  ✔ PASS: Multi-collection Join: Successfully resolved references to both authors and categories collections
+[Section 4: Requirement 4 - Get Book by ObjectId]
+  ✔ PASS: GET /api/books/:id returns HTTP 200 OK
+  ✔ PASS: GET /api/books/:id matches title of created book
+  ✔ PASS: GET /api/books/invalid-id rejects malformed ObjectId with HTTP 400
+  ✔ PASS: GET /api/books/:id returns HTTP 404 when document does not exist
+
+[Section 5: Requirement 4 - Update Book with Driver API]
+  ✔ PASS: PUT /api/books/:id returns HTTP 200 OK
+  ✔ PASS: PUT /api/books/:id successfully updates price and quantity in MongoDB
+
+[Section 6: Requirement 5 - Advanced Search Endpoint with Filtering & Pagination]
+  ✔ PASS: GET /api/books/search?keyword=clean returns HTTP 200 OK
+  ✔ PASS: Search by keyword: matches books with keyword in title or tags
+  ✔ PASS: GET /api/books/search with category and price range returns HTTP 200 OK
+  ✔ PASS: Search with price range: correctly bounds price >= 30 and price <= 50
+
+[Section 7: Requirement 4 - Delete Book with Driver API]
+  ✔ PASS: DELETE /api/books/:id returns HTTP 200 OK
+  ✔ PASS: Subsequent GET after DELETE returns HTTP 404 Not Found
+
+[Section 8: Requirement 5 - Error Handling & 404/500 Responses]
+  ✔ PASS: Unknown route returns structured HTTP 404 JSON
 
 ================================================================
-  VERIFICATION RESULTS: 17 PASSED, 0 FAILED (0.42s)
+  INTEGRATION TEST RESULTS: 22 PASSED, 0 FAILED (2.62s)
 ================================================================
 
-  🎉 ALL REQUIREMENTS MET SUCCESSFULLY (100% SCORE)!
+  🎉 ALL REQUIREMENTS (4 & 5) VERIFIED SUCCESSFULLY!
 ```
+
