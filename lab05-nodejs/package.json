@@ -1,0 +1,37 @@
+{
+  "name": "lab05-nodejs",
+  "version": "1.0.0",
+  "description": "Lab 05: Mongoose ODM: Schema, Model, Validation and Middleware - BookNest Online Bookstore",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "dev:mem": "node devMemory.js",
+    "local-db": "node localDb.js",
+    "test": "node testLab05.js",
+    "seed": "node seed.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongoose",
+    "odm",
+    "mongodb",
+    "mvc",
+    "booknest",
+    "sdn302"
+  ],
+  "author": "Nguyen Le Quang Trung (DS190284)",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.3.0",
+    "nodemon": "^3.1.4"
+  }
+}
