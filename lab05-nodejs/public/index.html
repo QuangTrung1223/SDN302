@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest Bookstore | Lab 05 Mongoose ODM</title>
+  <meta name="description" content="Lab 05: Mongoose ODM Schema, Model, Validation, Hooks, Methods & Virtuals for BookNest Bookstore">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Ambient background glow lights -->
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+          <span class="brand-name">BookNest</span>
+          <span class="badge-odm">Lab 05 • Mongoose ODM</span>
+        </div>
+      </a>
+      <div class="header-status">
+        <div class="status-pill">
+          <span class="status-pulse"></span>
+          <span id="statusText">Checking MongoDB...</span>
+        </div>
+        <button id="btnOpenCreateModal" class="btn btn-primary">
+          + Add New Book
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <span class="hero-tag">SDN302 Server-Side Development</span>
+      <h1 class="hero-title">
+        Enterprise Bookstore <span class="hero-gradient">Mongoose ODM</span>
+      </h1>
+      <p class="hero-desc">
+        Demonstrating MVC architecture, strict schema validation, pre/post save lifecycle hooks, static & instance methods, and dynamically computed virtual properties with MongoDB.
+      </p>
+    </section>
+
+    <!-- Stats Ribbon -->
+    <section class="stats-ribbon">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);">📖</div>
+        <div>
+          <div class="stat-val" id="statTotalBooks">0</div>
+          <div class="stat-label">Total Books Catalog</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-indigo);">🏷️</div>
+        <div>
+          <div class="stat-val" id="statCategories">0</div>
+          <div class="stat-label">Categories (Model 2)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);">📦</div>
+        <div>
+          <div class="stat-val" id="statInStock">0</div>
+          <div class="stat-label">In-Stock Books</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">💎</div>
+        <div>
+          <div class="stat-val" id="statAvgPrice">$0.00</div>
+          <div class="stat-label">Average Price</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Control & Search Bar -->
+    <section class="control-bar">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by title, author, or description...">
+      </div>
+
+      <div class="filter-group">
+        <select id="categoryFilter" class="select-styled">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="sortFilter" class="select-styled">
+          <option value="-createdAt">Newest First</option>
+          <option value="price">Price: Low to High</option>
+          <option value="-price">Price: High to Low</option>
+          <option value="title">Title: A to Z</option>
+        </select>
+
+        <button id="btnRefresh" class="btn btn-outline" title="Reload from MongoDB">
+          ↻ Refresh
+        </button>
+      </div>
+    </section>
+
+    <!-- Books Grid -->
+    <section id="booksGrid" class="books-grid">
+      <!-- Dynamic cards rendered by app.js -->
+    </section>
+
+    <!-- Mongoose Features Showcase Section -->
+    <section class="features-section">
+      <h2 class="features-title">⚡ Mongoose Lab 05 Features in Action</h2>
+      <p class="features-subtitle">Click below to directly invoke Mongoose Schema Hooks, Methods, and Virtuals implemented in code.</p>
+      
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <h4>1. Static Method</h4>
+          <p><code>Book.findByCategory()</code> finds all in-stock books in category sorted by price ascending.</p>
+          <button class="btn btn-outline btn-sm" onclick="testStaticMethod('Software Engineering')">
+            Test: Software Eng
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="testStaticMethod('Architecture')">
+            Test: Architecture
+          </button>
+        </div>
+
+        <div class="showcase-card">
+          <h4>2. Pre-Save Hook</h4>
+          <p><code>pre('save')</code> automatically transforms the book title into a clean URL-friendly <strong>slug</strong>.</p>
+          <span class="pill pill-slug">/clean-code-a-handbook-...</span>
+        </div>
+
+        <div class="showcase-card">
+          <h4>3. Virtual Property</h4>
+          <p><code>formattedPrice</code> dynamically formats numeric price into <code>$XX.XX</code> without storing currency strings in DB.</p>
+          <span style="font-weight: 800; color: var(--accent-cyan);">$37.50</span>
+        </div>
+
+        <div class="showcase-card">
+          <h4>4. Custom Validators</h4>
+          <p>Rejects future published years (<code>&gt; 2026</code>) and enforces ISBN regex patterns via Central Error Handler.</p>
+          <button class="btn btn-outline btn-sm" onclick="btnOpenCreateModal.click()">
+            Try Validation
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Create Book Modal -->
+  <div id="createModal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close">&times;</button>
+      <h3 class="modal-title">📖 Add New Book to MongoDB</h3>
+      
+      <div id="formAlert" class="alert-box"></div>
+
+      <form id="bookForm">
+        <div class="form-row">
+          <label class="form-label">Book Title *</label>
+          <input type="text" id="bookTitle" class="form-input" required placeholder="e.g. Clean Architecture">
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label class="form-label">Author *</label>
+            <input type="text" id="bookAuthor" class="form-input" required placeholder="e.g. Robert C. Martin">
+          </div>
+          <div>
+            <label class="form-label">ISBN * (Regex Validated)</label>
+            <input type="text" id="bookIsbn" class="form-input" required placeholder="e.g. 978-0134494166">
+          </div>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label class="form-label">Category * (Enum)</label>
+            <select id="bookCategory" class="form-select" required></select>
+          </div>
+          <div>
+            <label class="form-label">Published Year * (&le; 2026)</label>
+            <input type="number" id="bookYear" class="form-input" value="2023" required>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label class="form-label">Price ($) * (Min: 0)</label>
+            <input type="number" id="bookPrice" step="0.01" class="form-input" value="39.99" required>
+          </div>
+          <div>
+            <label class="form-label">Stock Quantity (Max: 9999)</label>
+            <input type="number" id="bookQuantity" class="form-input" value="10">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Tags (comma-separated)</label>
+          <input type="text" id="bookTags" class="form-input" placeholder="clean-code, architecture, design">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Description</label>
+          <textarea id="bookDescription" class="form-textarea" rows="3" placeholder="Brief book description..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Book Summary Modal (Instance Method Showcase) -->
+  <div id="summaryModal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close">&times;</button>
+      <h3 class="modal-title" style="color: var(--accent-cyan);">Instance Method: getSummary()</h3>
+      <h4 id="summaryModalTitle" style="margin-bottom: 12px;"></h4>
+      <p id="summaryModalText" style="background: rgba(10, 15, 29, 0.8); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 13px; line-height: 1.6; margin-bottom: 16px; color: #a5b4fc;"></p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; color: var(--text-muted);">Virtual Price: <strong id="summaryVirtualPrice" style="color: var(--accent-cyan);"></strong></span>
+        <button class="btn btn-primary btn-close-modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
