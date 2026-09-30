@@ -1,0 +1,37 @@
+{
+  "name": "lab06-nodejs",
+  "version": "1.0.0",
+  "description": "Lab 06: Managing Relationships with Mongoose Population - BookNest Online Bookstore",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "local-db": "node localDb.js",
+    "test": "node testLab06.js",
+    "seed": "node seed.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongoose",
+    "population",
+    "relationships",
+    "deep-populate",
+    "virtual-populate",
+    "booknest",
+    "sdn302"
+  ],
+  "author": "Nguyen Le Quang Trung (DS190284)",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^9.4.0",
+    "nodemon": "^3.1.4"
+  }
+}
