@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest Bookstore | Lab 06 Mongoose Population</title>
+  <meta name="description" content="Lab 06: Managing Relationships with Mongoose Population - Multi-path, Deep, and Virtual Population">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+          <span class="brand-name">BookNest</span>
+          <span class="badge-odm">Lab 06 • Mongoose Population</span>
+        </div>
+      </a>
+      <div class="status-pill">
+        <span class="status-pulse"></span>
+        <span id="statusText">Connecting MongoDB...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <span class="hero-tag">SDN302 Server-Side Development</span>
+      <h1 class="hero-title">
+        Managing Relationships with <span class="hero-gradient">Mongoose Population</span>
+      </h1>
+      <p class="hero-desc">
+        Explore normalized data models with ObjectId references, multi-path population with field projection, two-tier deep nested population (Book &rarr; Reviews &rarr; User), and Virtual Population without array overhead.
+      </p>
+    </section>
+
+    <!-- Requirement 2: Population Live Toggle Bar -->
+    <section class="population-toolbar">
+      <div class="toggle-wrapper">
+        <label class="toggle-switch">
+          <input type="checkbox" id="togglePopulate" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <div>
+          <div class="toggle-label" id="toggleStatusText">Populated (Documents)</div>
+          <div class="toggle-desc">Toggle between raw ObjectId references vs hydrated Mongoose documents (Requirement 2).</div>
+        </div>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-muted);">
+        Query: <code style="color: var(--accent-cyan); font-family: var(--font-mono);">Book.find().populate('author', 'name bio').populate('category')</code>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" data-tab="books">📖 Books Catalog (Multi-Path)</button>
+      <button class="tab-btn" data-tab="authors">✍️ Authors (Virtual Populate)</button>
+      <button class="tab-btn" data-tab="categories">🏷️ Categories (Virtual Populate)</button>
+    </div>
+
+    <!-- Section 1: Books Grid -->
+    <section id="sectionBooks">
+      <div id="booksGrid" class="books-grid"></div>
+    </section>
+
+    <!-- Section 2: Authors Grid (Virtual Populate) -->
+    <section id="sectionAuthors" style="display: none;">
+      <div style="margin-bottom: 20px; color: var(--text-muted); font-size: 14px;">
+        💡 <strong>Virtual Populate Demonstration:</strong> Authors do not store an array of book IDs in MongoDB. Mongoose dynamically populates <code>author.books</code> using <code>localField: '_id', foreignField: 'author'</code>.
+      </div>
+      <div id="authorsGrid" class="books-grid"></div>
+    </section>
+
+    <!-- Section 3: Categories Grid (Virtual Populate) -->
+    <section id="sectionCategories" style="display: none;">
+      <div style="margin-bottom: 20px; color: var(--text-muted); font-size: 14px;">
+        💡 <strong>Category Virtual Populate:</strong> <code>Category.virtual('books')</code> matches all books belonging to each category without array storage overhead.
+      </div>
+      <div id="categoriesGrid" class="books-grid"></div>
+    </section>
+  </main>
+
+  <!-- Deep Population & Reviews Modal (Requirement 3) -->
+  <div id="detailModal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close">&times;</button>
+      <h3 id="modalBookTitle" class="modal-title" style="color: var(--accent-cyan);">Book Details</h3>
+      
+      <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+        <span class="author-pill">✍️ <span id="modalAuthorName"></span></span>
+        <span class="badge-category">🏷️ <span id="modalCategoryName"></span></span>
+      </div>
+      <p id="modalAuthorBio" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-style: italic;"></p>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <h4 style="font-size: 16px; font-weight: 700;">
+            💬 Deep Nested Reviews &rarr; User <span id="modalReviewCount" style="font-size: 12px; color: var(--accent-cyan);"></span>
+          </h4>
+
+          <div style="display: flex; gap: 8px;">
+            <!-- Requirement 3: match filter -->
+            <select id="reviewFilterSelect" class="btn btn-outline" style="font-size: 12px; padding: 4px 8px;">
+              <option value="">All Ratings (match: all)</option>
+              <option value="4">&ge; 4 Stars (match: { rating: &ge; 4 })</option>
+              <option value="5">5 Stars Only (match: { rating: 5 })</option>
+            </select>
+
+            <!-- Requirement 3: options sort -->
+            <select id="reviewSortSelect" class="btn btn-outline" style="font-size: 12px; padding: 4px 8px;">
+              <option value="-rating">Sort: High to Low (options.sort)</option>
+              <option value="rating">Sort: Low to High</option>
+              <option value="-createdAt">Sort: Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="modalReviewsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON Comparison Modal (Requirement 2 Report Evidence) -->
+  <div id="compareModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 800px;">
+      <button class="modal-close">&times;</button>
+      <h3 class="modal-title">📊 JSON Comparison: Before vs After Population</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+        Requirement 2 Evidence: Demonstrates how Mongoose replaces raw 24-character hexadecimal ObjectId strings with fully hydrated sub-documents.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--accent-rose); margin-bottom: 6px;">
+            BEFORE Population (Raw ObjectId):
+          </div>
+          <pre id="rawJsonView" class="json-view-box" style="color: #fda4af;"></pre>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--accent-emerald); margin-bottom: 6px;">
+            AFTER Population (Hydrated Document):
+          </div>
+          <pre id="popJsonView" class="json-view-box" style="color: #6ee7b7;"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
